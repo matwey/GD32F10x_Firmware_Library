@@ -307,13 +307,17 @@ typedef enum IRQn
 /* includes */
 #include "core_cm3.h"
 #include "system_gd32f10x.h"
+#include <stdbool.h>
 #include <stdint.h>
 
 /* enum definitions */
 typedef enum {DISABLE = 0, ENABLE = !DISABLE} EventStatus, ControlStatus;
-typedef enum {FALSE = 0, TRUE = !FALSE} bool;
 typedef enum {RESET = 0, SET = !RESET} FlagStatus;
 typedef enum {ERROR = 0, SUCCESS = !ERROR} ErrStatus;
+
+/* defines for older code that used TRUE/FALSE instead of true/false */
+#define FALSE false
+#define TRUE true
 
 /* bit operations */
 #define REG32(addr)                  (*(volatile uint32_t *)(uint32_t)(addr))
