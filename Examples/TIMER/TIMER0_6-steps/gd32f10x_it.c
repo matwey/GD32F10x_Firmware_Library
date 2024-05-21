@@ -2,14 +2,11 @@
     \file    gd32f10x_it.c
     \brief   interrupt service routines
 
-    \version 2014-12-26, V1.0.0, firmware for GD32F10x
-    \version 2017-06-20, V2.0.0, firmware for GD32F10x
-    \version 2018-07-31, V2.1.0, firmware for GD32F10x
-    \version 2020-09-30, V2.2.0, firmware for GD32F10x
+    \version 2024-01-05, V2.3.0, firmware for GD32F10x
 */
 
 /*
-    Copyright (c) 2020, GigaDevice Semiconductor Inc.
+    Copyright (c) 2024, GigaDevice Semiconductor Inc.
 
     Redistribution and use in source and binary forms, with or without modification, 
 are permitted provided that the following conditions are met:
@@ -49,6 +46,9 @@ __IO uint32_t step = 1;
 */
 void NMI_Handler(void)
 {
+    /* if NMI exception occurs, go to infinite loop */
+    while(1){
+    }
 }
 
 /*!
@@ -107,6 +107,9 @@ void UsageFault_Handler(void)
 */
 void SVC_Handler(void)
 {
+    /* if SVC exception occurs, go to infinite loop */
+    while(1){
+    }
 }
 
 /*!
@@ -117,6 +120,9 @@ void SVC_Handler(void)
 */
 void DebugMon_Handler(void)
 {
+    /* if DebugMon exception occurs, go to infinite loop */
+    while(1){
+    }
 }
 
 /*!
@@ -127,6 +133,9 @@ void DebugMon_Handler(void)
 */
 void PendSV_Handler(void)
 {
+    /* if PendSV exception occurs, go to infinite loop */
+    while(1){
+    }
 }
 
 /*!

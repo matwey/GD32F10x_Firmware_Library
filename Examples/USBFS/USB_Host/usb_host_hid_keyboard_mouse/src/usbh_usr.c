@@ -2,12 +2,11 @@
     \file    usbh_usr.c
     \brief   some user routines
 
-    \version 2020-07-17, V3.0.0, firmware for GD32F10x
-    \version 2022-06-30, V3.1.0, firmware for GD32F10x
+    \version 2024-01-05, V2.3.0, firmware for GD32F10x
 */
 
 /*
-    Copyright (c) 2022, GigaDevice Semiconductor Inc.
+    Copyright (c) 2024, GigaDevice Semiconductor Inc.
 
     Redistribution and use in source and binary forms, with or without modification, 
 are permitted provided that the following conditions are met:
@@ -49,7 +48,7 @@ uint16_t keyboard_char_ypos = 0;
 extern usbh_host usb_host;
 extern usb_core_driver usb_hid_core;
 
-/* Points to the DEVICE_PROP structure of current device */
+/* Points to the usbh_user_cb structure of current device */
 usbh_user_cb usr_cb =
 {
     usbh_user_init,

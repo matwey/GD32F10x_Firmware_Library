@@ -2,12 +2,11 @@
     \file    main.c
     \brief   ADC0 EXTI trigger regular and inserted channel
     
-    \version 2017-12-26, V1.0.0, firmware for GD32F10x
-    \version 2020-09-30, V2.2.0, firmware for GD32F10x
+    \version 2024-01-05, V2.3.0, firmware for GD32F10x
 */
 
 /*
-    Copyright (c) 2020, GigaDevice Semiconductor Inc.
+    Copyright (c) 2024, GigaDevice Semiconductor Inc.
 
     Redistribution and use in source and binary forms, with or without modification, 
 are permitted provided that the following conditions are met:

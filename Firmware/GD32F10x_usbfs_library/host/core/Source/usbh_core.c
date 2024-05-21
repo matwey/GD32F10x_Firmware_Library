@@ -2,12 +2,11 @@
     \file    usbh_core.c
     \brief   USB host core state machine driver
 
-    \version 2020-07-17, V3.0.0, firmware for GD32F10x
-    \version 2022-06-30, V3.1.0, firmware for GD32F10x
+    \version 2024-01-05, V2.3.0, firmware for GD32F10x
 */
 
 /*
-    Copyright (c) 2022, GigaDevice Semiconductor Inc.
+    Copyright (c) 2024, GigaDevice Semiconductor Inc.
 
     Redistribution and use in source and binary forms, with or without modification, 
 are permitted provided that the following conditions are met:
@@ -414,9 +413,10 @@ void usbh_error_handler (usbh_host *uhost, usbh_status err_type)
 */
 static uint8_t usb_ev_sof (usbh_host *uhost)
 {
-    /* this callback could be used to implement a scheduler process */
-    uhost->control.timer = (uint16_t)usb_curframe_get(&usbh_core);
+    /* update timer variable */
+    uhost->control.timer++;
 
+    /* this callback could be used to implement a scheduler process */
     if (uhost->active_class != NULL) {
         if (uhost->active_class->class_sof != NULL) {
             uhost->active_class->class_sof(uhost);

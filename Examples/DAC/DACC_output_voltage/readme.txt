@@ -2,14 +2,11 @@
     \file    readme.txt
     \brief   description of DACC_output_voltage example
 
-    \version 2014-12-26, V1.0.0, firmware for GD32F10x
-    \version 2017-06-20, V2.0.0, firmware for GD32F10x
-    \version 2018-07-31, V2.1.0, firmware for GD32F10x
-    \version 2020-09-30, V2.2.0, firmware for GD32F10x
+    \version 2024-01-05, V2.3.0, firmware for GD32F10x
 */
 
 /*
-    Copyright (c) 2020, GigaDevice Semiconductor Inc.
+    Copyright (c) 2024, GigaDevice Semiconductor Inc.
 
     Redistribution and use in source and binary forms, with or without modification, 
 are permitted provided that the following conditions are met:
@@ -35,7 +32,11 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
 OF SUCH DAMAGE.
 */
 
-  This example is based on the GD32107C-EVAL board, it shows how to use DAC concurrent mode
-output voltage. No trigger source is chosen to trigger DAC. The DAC0 output pin is configured
-PA4 and DAC1 output pin is configured PA5. There are two different voltage in PA4 and PA5. The
-voltage of PA4 is VREF/2 and the voltage of PA5 is VREF/8.
+  This example is based on the GD32F107C-EVAL-V1.3 board, it shows how to use DAC concurrent 
+mode to output voltage.
+
+  DAC is configured as following:
+  - Data 12-bit left alligned.
+  - DAC0_OUT0/DAC0_OUT1 is configured as PA4/PA5.
+
+  After system start-up, VREF/2(PA4) and VREF/8(PA5) can be observed through the scilloscope.

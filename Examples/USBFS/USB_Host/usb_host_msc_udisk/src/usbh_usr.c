@@ -2,12 +2,11 @@
     \file    usbh_usr.c
     \brief   user application layer for USBFS host-mode MSC class operation
 
-    \version 2020-07-17, V3.0.0, firmware for GD32F10x
-    \version 2022-06-30, V3.1.0, firmware for GD32F10x
+    \version 2024-01-05, V2.3.0, firmware for GD32F10x
 */
 
 /*
-    Copyright (c) 2022, GigaDevice Semiconductor Inc.
+    Copyright (c) 2024, GigaDevice Semiconductor Inc.
 
     Redistribution and use in source and binary forms, with or without modification, 
 are permitted provided that the following conditions are met:
@@ -46,11 +45,16 @@ extern usbh_host usb_host;
 
 FATFS fatfs;
 FIL file;
+FRESULT res;
+
+char ReadTextBuff[100];
+char WriteTextBuff[] = "GD32 USB Host Demo application using FAT_FS   ";
+uint16_t bytesWritten, bytesToWrite, bytesRead;
 
 uint8_t line_idx;
 uint8_t usbh_usr_application_state = USBH_USR_FS_INIT;
 
-/*  points to the DEVICE_PROP structure of current device */
+/*  points to the usbh_user_cb structure of current device */
 usbh_user_cb usr_cb =
 {
     usbh_user_init,
@@ -352,14 +356,11 @@ void usbh_user_over_current_detected (void)
 */
 int usbh_usr_msc_application(void)
 {
-    FRESULT res;
     msc_lun info;
-    uint8_t WriteTextBuff[] = "GD32 Connectivity line Host Demo application using FAT_FS   ";
-    uint16_t bytesWritten, bytesToWrite;
 
     switch(usbh_usr_application_state){
     case USBH_USR_FS_INIT:
-        /* initializes the file system*/
+        /* initializes the file system */
         if (FR_OK != f_mount(&fatfs, "0:/", 0)) {
             LCD_ErrLog("> Cannot initialize File System.\r\n");
 
@@ -369,7 +370,7 @@ int usbh_usr_msc_application(void)
         LCD_UsrLog("> File System initialized.\r\n");
         if (USBH_OK == usbh_msc_lun_info_get(&usb_host, 0U, &info))
         {
-            LCD_UsrLog("> Disk capacity: %ud Bytes.\r\n", info.capacity.block_nbr * info.capacity.block_size);
+            LCD_UsrLog("> Disk capacity: %llud Bytes.\r\n", (uint64_t)info.capacity.block_nbr * info.capacity.block_size);
         }
 
         usbh_usr_application_state = USBH_USR_FS_READLIST;
@@ -382,7 +383,7 @@ int usbh_usr_msc_application(void)
         lcd_vertical_string_display(LCD_HINT_LINE1, 0U, (uint8_t *)"To see the root content of disk");
         lcd_vertical_string_display(LCD_HINT_LINE2, 0U, (uint8_t *)"Press Tamper Key...            ");
 
-        /*Key B3 in polling*/
+        /* key TAMPER in polling */
         while ((usbh_core.host.connect_status) && \
             (SET == gd_eval_key_state_get (KEY_TAMPER))) {
             toggle_leds();
@@ -400,7 +401,7 @@ int usbh_usr_msc_application(void)
         lcd_vertical_string_display(LCD_HINT_LINE1, 0U, (uint8_t *)"                                  ");
         lcd_vertical_string_display(LCD_HINT_LINE2, 0U, (uint8_t *)"Press Wakeup Key to write file");
 
-        /*key b3 in polling*/
+        /* key WAKEUP in polling */
         while ((usbh_core.host.connect_status) && \
                 (SET == gd_eval_key_state_get (KEY_WAKEUP))) {
             toggle_leds();
@@ -413,21 +414,39 @@ int usbh_usr_msc_application(void)
 
         if (FR_OK == f_open(&file, "0:GD32.TXT", FA_CREATE_ALWAYS | FA_WRITE)) {
             /* write buffer to file */
-            bytesToWrite = sizeof(WriteTextBuff); 
+            bytesToWrite = strlen(WriteTextBuff);
             res = f_write (&file, WriteTextBuff, bytesToWrite, (void *)&bytesWritten);
+            f_sync(&file);
             /* EOF or error */
             if ((0U == bytesWritten) || (FR_OK != res)) {
-                LCD_ErrLog("> GD32.TXT CANNOT be writen.\r\n");
+                LCD_ErrLog("> GD32.TXT CANNOT be written.\r\n");
             } else {
-                LCD_UsrLog("> GD32.TXT created in the disk.\r\n");
+                if (FR_OK == f_open(&file, "0:GD32.TXT", FA_READ)) {
+                    res = f_read(&file, ReadTextBuff, sizeof(ReadTextBuff), (void *)&bytesRead);
+                    /* EOF or error */
+                    if ((0U == bytesRead) || (FR_OK != res)) {
+                        LCD_ErrLog("> GD32.TXT CANNOT be read.\r\n");
+                    } else {
+                        /* compare file content */
+                       if ((bytesRead == bytesWritten) && (0 == strncmp(ReadTextBuff, WriteTextBuff, bytesRead))) {
+                            LCD_UsrLog("> File content compare: SUCCESS.\r\n");
+                        } else {
+                            LCD_ErrLog("> File content compare: ERROR.\r\n");
+                        }
+                    }
+                } else {
+                    LCD_ErrLog("> GD32.TXT CANNOT be opened for read.\r\n");
+                }
             }
 
-            /* close file and file system */
+            /* close file */
             f_close(&file);
-            f_mount(NULL, "0:/", 1); 
         } else {
-            LCD_UsrLog("> GD32.TXT created in the disk.\r\n");
+            LCD_ErrLog("> GD32.TXT CANNOT be opened.\r\n");
         }
+
+        /* unmount file system */
+        f_mount(NULL, "0:/", 1);
 
         usbh_usr_application_state = USBH_USR_FS_DEMOEND;
         LCD_UsrLog("> The MSC host demo is end.\r\n");

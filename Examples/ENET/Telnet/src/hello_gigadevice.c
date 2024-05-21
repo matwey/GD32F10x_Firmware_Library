@@ -2,14 +2,11 @@
     \file    hello_gigadevice.c
     \brief   TCP server demo program 
 
-    \version 2014-12-26, V1.0.0, firmware for GD32F10x
-    \version 2017-06-20, V2.0.0, firmware for GD32F10x
-    \version 2018-07-31, V2.1.0, firmware for GD32F10x
-    \version 2020-09-30, V2.2.0, firmware for GD32F10x
+    \version 2024-01-05, V2.3.0, firmware for GD32F10x
 */
 
 /*
-    Copyright (c) 2020, GigaDevice Semiconductor Inc.
+    Copyright (c) 2024, GigaDevice Semiconductor Inc.
 
     Redistribution and use in source and binary forms, with or without modification, 
 are permitted provided that the following conditions are met:
@@ -45,7 +42,7 @@ OF SUCH DAMAGE.
                           \n\r== GD32 ==\
                           \n\r== Telnet SUCCESS==\
                           \n\rHello. What is your name?\r\n"
-#define HELLO            "\n\rGigaDevice¡¾23¡¿PORT Hello "
+#define HELLO            "\n\rGigaDeviceï¿½ï¿½23ï¿½ï¿½PORT Hello "
 #define MAX_NAME_SIZE    32
 
 extern const uint8_t gd32_str[];

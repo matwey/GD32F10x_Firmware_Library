@@ -2,12 +2,11 @@
     \file    drv_usb_core.h
     \brief   USB core low level driver header file
 
-    \version 2020-07-17, V3.0.0, firmware for GD32F10x
-    \version 2022-06-30, V3.1.0, firmware for GD32F10x
+    \version 2024-01-05, V2.3.0, firmware for GD32F10x
 */
 
 /*
-    Copyright (c) 2022, GigaDevice Semiconductor Inc.
+    Copyright (c) 2024, GigaDevice Semiconductor Inc.
 
     Redistribution and use in source and binary forms, with or without modification, 
 are permitted provided that the following conditions are met:

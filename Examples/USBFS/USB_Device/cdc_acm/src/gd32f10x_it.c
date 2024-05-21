@@ -2,12 +2,11 @@
     \file    gd32f10x_it.c
     \brief   main interrupt service routines
 
-    \version 2020-07-17, V3.0.0, firmware for GD32F10x
-    \version 2022-06-30, V3.1.0, firmware for GD32F10x
+    \version 2024-01-05, V2.3.0, firmware for GD32F10x
 */
 
-/*
-    Copyright (c) 2022, GigaDevice Semiconductor Inc.
+/*  Copyright (c) 2012 ARM LIMITED
+    Copyright (c) 2024, GigaDevice Semiconductor Inc.
 
     Redistribution and use in source and binary forms, with or without modification, 
 are permitted provided that the following conditions are met:
@@ -51,6 +50,9 @@ static void resume_mcu_clk(void);
 */
 void NMI_Handler(void)
 {
+    /* if NMI exception occurs, go to infinite loop */
+    while(1){
+    }
 }
 
 /*!
@@ -109,6 +111,9 @@ void UsageFault_Handler(void)
 */
 void SVC_Handler(void)
 {
+    /* if SVC exception occurs, go to infinite loop */
+    while(1){
+    }
 }
 
 /*!
@@ -119,6 +124,9 @@ void SVC_Handler(void)
 */
 void DebugMon_Handler(void)
 {
+    /* if DebugMon exception occurs, go to infinite loop */
+    while(1){
+    }
 }
 
 /*!
@@ -129,6 +137,9 @@ void DebugMon_Handler(void)
 */
 void PendSV_Handler(void)
 {
+    /* if PendSV exception occurs, go to infinite loop */
+    while(1){
+    }
 }
 
 /*!

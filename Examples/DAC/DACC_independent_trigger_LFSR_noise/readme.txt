@@ -2,14 +2,11 @@
     \file    readme.txt
     \brief   description of DACC_independent_trigger_LFSR_noise example
 
-    \version 2014-12-26, V1.0.0, firmware for GD32F10x
-    \version 2017-06-20, V2.0.0, firmware for GD32F10x
-    \version 2018-07-31, V2.1.0, firmware for GD32F10x
-    \version 2020-09-30, V2.2.0, firmware for GD32F10x
+    \version 2024-01-05, V2.3.0, firmware for GD32F10x
 */
 
 /*
-    Copyright (c) 2020, GigaDevice Semiconductor Inc.
+    Copyright (c) 2024, GigaDevice Semiconductor Inc.
 
     Redistribution and use in source and binary forms, with or without modification, 
 are permitted provided that the following conditions are met:
@@ -35,8 +32,18 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
 OF SUCH DAMAGE.
 */
 
-  This example is based on the GD32107C-EVAL board, it shows how to use DAC concurrent mode
-independent trigger to generate LFSR noise wave with different configurations. TIMER5 is 
-chosen to trigger DAC0. TIMER6 is chosen to trigger DAC1. The DAC0 output pin is configured
-PA4 and DAC1 output pin is configured PA5. The LFSR noise wave can be observed through the 
-oscilloscope.
+  This example is based on the GD32F107C-EVAL-V1.3 board, it shows how to use DAC concurrent 
+mode to generate LFSR noise wave with different trigger signal TIMER5 and TIMER6.
+
+  TIMER5 and TIMER6 are configured as following:
+  - Up counting mode.
+  - System clock devide into 1Mhz.
+  - Update event per millisecond.
+  - Update event as TRGO to trigger DAC0_OUT0/DAC0_OUT1.
+  DAC is configured as following:
+  - Data 12-bit right alligned.
+  - TIMER5/TIMER6 TRGO signal trigger DAC0_OUT0/DAC0_OUT1.
+  - DAC0_OUT0/DAC0_OUT1 is configured as PA4/PA5.
+  - LFSR mode, with 0-9/0-10 bit masking and offset value 0x7f0.
+
+  After system start-up, the LFSR noise wave can be observed through the scilloscope.

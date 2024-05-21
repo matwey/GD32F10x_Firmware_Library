@@ -4,8 +4,8 @@
              GD32F10x Device Series
 */
 
-/*
-    Copyright (c) 2012 ARM LIMITED
+/*  Copyright (c) 2012 ARM LIMITED
+    Copyright (c) 2024, GigaDevice Semiconductor Inc.
 
     All rights reserved.
 

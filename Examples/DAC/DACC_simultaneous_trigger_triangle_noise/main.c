@@ -2,14 +2,11 @@
     \file    main.c
     \brief   DAC concurrent mode simultaneous trigger with same triangle wave demo
 
-    \version 2014-12-26, V1.0.0, firmware for GD32F10x
-    \version 2017-06-20, V2.0.0, firmware for GD32F10x
-    \version 2018-07-31, V2.1.0, firmware for GD32F10x
-    \version 2020-09-30, V2.2.0, firmware for GD32F10x
+    \version 2024-01-05, V2.3.0, firmware for GD32F10x
 */
 
 /*
-    Copyright (c) 2020, GigaDevice Semiconductor Inc.
+    Copyright (c) 2024, GigaDevice Semiconductor Inc.
 
     Redistribution and use in source and binary forms, with or without modification, 
 are permitted provided that the following conditions are met:
@@ -37,9 +34,13 @@ OF SUCH DAMAGE.
 
 #include "gd32f10x.h"
 
+/* configure RCU peripheral */
 void rcu_config(void);
+/* configure GPIO peripheral */
 void gpio_config(void);
+/* configure DAC peripheral */
 void dac_config(void);
+/* configure TIMER peripheral */
 void timer5_config(void);
 
 /*!
@@ -50,80 +51,102 @@ void timer5_config(void);
 */
 int main(void)
 {
+    /* configure RCU peripheral */
     rcu_config();
+    /* configure GPIO peripheral */
     gpio_config();
+    /* configure DAC peripheral */
     dac_config();
+    /* configure TIMER peripheral */
     timer5_config();
-    while (1){
+
+    while(1) {
     }
 }
 
 /*!
-    \brief      configure the RCU of peripherals
+    \brief      configure RCU peripheral
     \param[in]  none
     \param[out] none
     \retval     none
 */
 void rcu_config(void)
 {
-    /* enable the clock of peripherals */
+    /* enable GPIOA clock */
     rcu_periph_clock_enable(RCU_GPIOA);
+    /* enable DAC clock */
     rcu_periph_clock_enable(RCU_DAC);
+    /* enable TIMER clock */
     rcu_periph_clock_enable(RCU_TIMER5);
 }
 
 /*!
-    \brief      configure the related GPIO
+    \brief      configure GPIO peripheral
     \param[in]  none
     \param[out] none
     \retval     none
 */
 void gpio_config(void)
 {
-    /* once enabled the DAC, the corresponding GPIO pin is connected to the DAC converter automatically */
+    /* configure PA4 and PA5 as DAC output */
     gpio_init(GPIOA, GPIO_MODE_AIN, GPIO_OSPEED_50MHZ, GPIO_PIN_4 | GPIO_PIN_5);
 }
 
 /*!
-    \brief      configure the DAC
+    \brief      configure DAC peripheral
     \param[in]  none
     \param[out] none
     \retval     none
 */
 void dac_config(void)
 {
-    dac_deinit();
-    /* configure the DAC0 */
-    dac_trigger_source_config(DAC0, DAC_TRIGGER_T5_TRGO);
-    dac_trigger_enable(DAC0);
-    dac_wave_mode_config(DAC0, DAC_WAVE_MODE_TRIANGLE);
-    dac_triangle_noise_config(DAC0, DAC_TRIANGLE_AMPLITUDE_1023);
-    dac_output_buffer_disable(DAC0);
-    
-    /* configure the DAC1 */
-    dac_trigger_source_config(DAC1, DAC_TRIGGER_T5_TRGO);
-    dac_trigger_enable(DAC1);
-    dac_wave_mode_config(DAC1, DAC_WAVE_MODE_TRIANGLE);
-    dac_triangle_noise_config(DAC1, DAC_TRIANGLE_AMPLITUDE_1023);
-    dac_output_buffer_disable(DAC1);
-    
-    /* enable DAC concurrent mode and set data */
-    dac_concurrent_enable();
-    dac_concurrent_data_set(DAC_ALIGN_12B_R, 0x7F0, 0x1F0);
+    /* initialize DAC */
+    dac_deinit(DAC0);
+    /* DAC trigger config */
+    dac_trigger_source_config(DAC0, DAC_OUT0, DAC_TRIGGER_T5_TRGO);
+    dac_trigger_source_config(DAC0, DAC_OUT1, DAC_TRIGGER_T5_TRGO);
+    /* DAC trigger enable */
+    dac_trigger_enable(DAC0, DAC_OUT0);
+    dac_trigger_enable(DAC0, DAC_OUT1);
+    /* DAC wave mode config */
+    dac_wave_mode_config(DAC0, DAC_OUT0, DAC_WAVE_MODE_TRIANGLE);
+    dac_triangle_noise_config(DAC0, DAC_OUT0, DAC_TRIANGLE_AMPLITUDE_1023);
+    dac_wave_mode_config(DAC0, DAC_OUT1, DAC_WAVE_MODE_TRIANGLE);
+    dac_triangle_noise_config(DAC0, DAC_OUT1, DAC_TRIANGLE_AMPLITUDE_1023);
+
+    /* DAC enable */
+    dac_concurrent_enable(DAC0);
+    dac_concurrent_data_set(DAC0, DAC_ALIGN_12B_R, 0x7F0, 0x1F0);
 }
 
 /*!
-    \brief      configure the TIMER5
+    \brief       configure TIMER5 peripheral
     \param[in]  none
     \param[out] none
     \retval     none
 */
 void timer5_config(void)
 {
-    /* configure the TIMER5 */
-    timer_prescaler_config(TIMER5, 0xF, TIMER_PSC_RELOAD_UPDATE);
-    timer_autoreload_value_config(TIMER5, 0x1FF);
+    timer_parameter_struct timer_initpara;
+
+    /* TIMER deinitialize */
+    timer_deinit(TIMER5);
+
+    /* TIMER configuration */
+    timer_struct_para_init(&timer_initpara);
+    timer_initpara.prescaler         = 107;
+    timer_initpara.alignedmode       = TIMER_COUNTER_EDGE;
+    timer_initpara.counterdirection  = TIMER_COUNTER_UP;
+    timer_initpara.period            = 999;
+    timer_initpara.clockdivision     = TIMER_CKDIV_DIV1;
+    timer_initpara.repetitioncounter = 0;
+
+    /* initialize TIMER init parameter struct */
+    timer_init(TIMER5, &timer_initpara);
+
+    /* TIMER master mode output trigger source: Update event */
     timer_master_output_trigger_source_select(TIMER5, TIMER_TRI_OUT_SRC_UPDATE);
-    
+
+    /* enable TIMER */
     timer_enable(TIMER5);
 }

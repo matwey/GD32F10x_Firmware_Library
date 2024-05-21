@@ -2,14 +2,11 @@
     \file    readme.txt
     \brief   description of the master transmit and slave receive through interrupt demo
 
-    \version 2014-12-26, V1.0.0, firmware for GD32F10x
-    \version 2017-06-20, V2.0.0, firmware for GD32F10x
-    \version 2018-07-31, V2.1.0, firmware for GD32F10x
-    \version 2020-09-30, V2.2.0, firmware for GD32F10x
+    \version 2024-01-05, V2.3.0, firmware for GD32F10x
 */
 
 /*
-    Copyright (c) 2020, GigaDevice Semiconductor Inc.
+    Copyright (c) 2024, GigaDevice Semiconductor Inc.
 
     Redistribution and use in source and binary forms, with or without modification, 
 are permitted provided that the following conditions are met:
@@ -38,13 +35,13 @@ OF SUCH DAMAGE.
   This example is based on the GD32107C-EVAL-V1.3 board, it shows master sends data and 
 slave receives data using interrupt mode.
 
-  1.Modify files: examlple/SPI/SPI_master_transmit_slave_receive_interrupt/main.h, choose
+  1.Modify files: example/SPI/SPI_master_transmit_slave_receive_interrupt/main.h, choose
 to disable CRC function.
   #define SPI_CRC_ENABLE       0
   After the communication is completed, if the data received equal to the data sent, LED2
 turn on, and if not, LED2 turn off.
 
-  2.Modify files: examlple/SPI/SPI_master_transmit_slave_receive_interrupt/main.h, choose
+  2.Modify files: example/SPI/SPI_master_transmit_slave_receive_interrupt/main.h, choose
 to enable CRC function.
   #define SPI_CRC_ENABLE       1
   After the communication is completed, if the CRC checking is passed, LED2 turn on,

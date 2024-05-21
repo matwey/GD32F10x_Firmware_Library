@@ -3,11 +3,11 @@
     \brief   CMSIS Cortex-M3 Device Peripheral Access Layer Source File for
              GD32F10x Device Series
              
-    \version 2020-07-01, V3.0.0, firmware for GD32F10x
+    \version 2024-01-05, V2.3.0, firmware for GD32F10x
 */
 
-/*
-    Copyright (c) 2020, GigaDevice Semiconductor Inc.
+/*  Copyright (c) 2012 ARM LIMITED
+    Copyright (c) 2024, GigaDevice Semiconductor Inc.
 
     Redistribution and use in source and binary forms, with or without modification, 
 are permitted provided that the following conditions are met:

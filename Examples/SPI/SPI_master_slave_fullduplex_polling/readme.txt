@@ -2,14 +2,11 @@
     \file    readme.txt
     \brief   description of the master and slave fullduplex communication use polling demo
 
-    \version 2014-12-26, V1.0.0, firmware for GD32F10x
-    \version 2017-06-20, V2.0.0, firmware for GD32F10x
-    \version 2018-07-31, V2.1.0, firmware for GD32F10x
-    \version 2020-09-30, V2.2.0, firmware for GD32F10x
+    \version 2024-01-05, V2.3.0, firmware for GD32F10x
 */
 
 /*
-    Copyright (c) 2020, GigaDevice Semiconductor Inc.
+    Copyright (c) 2024, GigaDevice Semiconductor Inc.
 
     Redistribution and use in source and binary forms, with or without modification, 
 are permitted provided that the following conditions are met:
@@ -35,16 +32,16 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
 OF SUCH DAMAGE.
 */
 
-  This example is based on the GD32107C-EVAL board, it shows SPI0 and SPI2 fullduplex
+  This example is based on the GD32107C-EVAL board, it shows SPI0 and SPI2 full-duplex
 communication using polling mode.
 
-  1.Modify file: examlple/SPI/SPI_master_slave_fullduplex_polling/main.c, choose to disable
+  1.Modify file: example/SPI/SPI_master_slave_fullduplex_polling/main.c, choose to disable
 CRC function.
   #define SPI_CRC_ENABLE       0
   After the communicate is completed, if the data received equal to the data sent, LED2 and LED3 
 turn on, if not LED2 and LED3 turn off.
 
-  2.Modify file: examlple/SPI/SPI_master_slave_fullduplex_polling/main.c, choose to enable
+  2.Modify file: example/SPI/SPI_master_slave_fullduplex_polling/main.c, choose to enable
 CRC function.
   #define SPI_CRC_ENABLE       1
   After the communication is completed, if the CRC checking is passed, LED2 and LED3 turn

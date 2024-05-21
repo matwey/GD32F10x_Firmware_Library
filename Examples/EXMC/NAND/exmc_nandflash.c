@@ -2,14 +2,11 @@
     \file    exmc_nandflash.c
     \brief   nandflash(hynix HY27UF081G2A) driver
 
-    \version 2014-12-26, V1.0.0, firmware for GD32F10x
-    \version 2017-06-20, V2.0.0, firmware for GD32F10x
-    \version 2018-07-31, V2.1.0, firmware for GD32F10x
-    \version 2020-09-30, V2.2.0, firmware for GD32F10x
+    \version 2024-01-05, V2.3.0, firmware for GD32F10x
 */
 
 /*
-    Copyright (c) 2020, GigaDevice Semiconductor Inc.
+    Copyright (c) 2024, GigaDevice Semiconductor Inc.
 
     Redistribution and use in source and binary forms, with or without modification, 
 are permitted provided that the following conditions are met:
@@ -170,8 +167,8 @@ static uint8_t exmc_nand_writepage(uint8_t *pbuffer, nand_address_struct address
                     bit7 bit6 bit5 bit4 bit3 bit2 bit1 bit0
        first byte:  A7   A6   A5   A4   A3   A2   A1   A0    (bit7 - bit0 of page address)
        second byte: 0    0    0    0    A11  A10  A9   A8    (bit11 - bit8 of page address, high 4bit must be zero)
-       third byte£º A19  A18  A17  A16  A15  A14  A13  A12
-       fourth byte£ºA27  A26  A25  A24  A23  A22  A21  A20
+       third byteï¿½ï¿½ A19  A18  A17  A16  A15  A14  A13  A12
+       fourth byteï¿½ï¿½A27  A26  A25  A24  A23  A22  A21  A20
     */
     NAND_ADDR_AREA = address.page_in_offset;
     NAND_ADDR_AREA = address.page_in_offset >> 8;
@@ -212,8 +209,8 @@ static uint8_t exmc_nand_readpage(uint8_t *pbuffer, nand_address_struct address,
                      bit7 bit6 bit5 bit4 bit3 bit2 bit1 bit0
         first byte:  A7   A6   A5   A4   A3   A2   A1   A0    (bit7 - bit0 of page address)
         second byte: 0    0    0    0    A11  A10  A9   A8    (bit11 - bit8 of page address, high 4bit must be zero)
-        third byte£º A19  A18  A17  A16  A15  A14  A13  A12
-        fourth byte£ºA27  A26  A25  A24  A23  A22  A21  A20
+        third byteï¿½ï¿½ A19  A18  A17  A16  A15  A14  A13  A12
+        fourth byteï¿½ï¿½A27  A26  A25  A24  A23  A22  A21  A20
     */
     NAND_ADDR_AREA = address.page_in_offset;
     NAND_ADDR_AREA = address.page_in_offset >> 8;

@@ -2,11 +2,11 @@
     \file    main.c
     \brief   USART DMA receive by IDLE interrupt
 
-    \version 2020-09-30, V1.0.0, firmware for GD32F10x
+        \version 2024-01-05, V2.3.0, firmware for GD32F10x
 */
 
 /*
-    Copyright (c) 2020, GigaDevice Semiconductor Inc.
+    Copyright (c) 2024, GigaDevice Semiconductor Inc.
 
     Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -39,8 +39,8 @@ OF SUCH DAMAGE.
 #define USART0_RDATA_ADDRESS      ((uint32_t)&USART_DATA(USART0))
 
 uint8_t rxbuffer[256];
-__IO uint8_t rx_count = 0;
-__IO uint8_t tx_count = 0;
+uint8_t rx_count = 0;
+uint8_t tx_count = 0;
 __IO uint8_t receive_flag = 0;
 
 void dma_config(void);

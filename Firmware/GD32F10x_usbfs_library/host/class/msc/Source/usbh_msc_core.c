@@ -2,12 +2,11 @@
     \file    usbh_core.c
     \brief   USB MSC(mass storage device) class driver
 
-    \version 2020-07-17, V3.0.0, firmware for GD32F10x
-    \version 2022-06-30, V3.1.0, firmware for GD32F10x
+    \version 2024-01-05, V2.3.0, firmware for GD32F10x
 */
 
 /*
-    Copyright (c) 2022, GigaDevice Semiconductor Inc.
+    Copyright (c) 2024, GigaDevice Semiconductor Inc.
 
     Redistribution and use in source and binary forms, with or without modification, 
 are permitted provided that the following conditions are met:
@@ -215,7 +214,6 @@ static usbh_status usbh_msc_handle (usbh_host *uhost)
     uint8_t ready_status = USBH_BUSY;
     usbh_msc_handler *msc = (usbh_msc_handler *)uhost->active_class->class_data;
 
-
     switch (msc->state) {
     case MSC_INIT:
         if (msc->cur_lun < msc->max_lun) {
@@ -295,12 +293,11 @@ static usbh_status usbh_msc_handle (usbh_host *uhost)
                     break;
 
                 case MSC_REQUEST_SENSE:
-                    /* issue RequestSense SCSI command for receive error code */
+                    /* issue RequestSense SCSI command for retrieving error code */
                     scsi_status = usbh_msc_request_sense (uhost, msc->cur_lun, &msc->unit[msc->cur_lun].sense);
                     if (USBH_OK == scsi_status) {
                         if ((msc->unit[msc->cur_lun].sense.SenseKey == UNIT_ATTENTION) || (msc->unit[msc->cur_lun].sense.SenseKey == NOT_READY)) {
-                            if (((uhost->control.timer > msc->timer) && ((uhost->control.timer - msc->timer) < 10000U)) \
-                                  || ((uhost->control.timer < msc->timer) && ((uhost->control.timer + 0x3FFFU - msc->timer) < 10000U))){
+                            if ((uhost->control.timer - msc->timer) < 10000U) {
                                 msc->unit[msc->cur_lun].state = MSC_TEST_UNIT_READY;
                                 break;
                             }
@@ -500,9 +497,7 @@ usbh_status usbh_msc_read (usbh_host *uhost,
     timeout = uhost->control.timer;
 
     while (USBH_BUSY == usbh_msc_rdwr_process(uhost, lun)) {
-        if (((uhost->control.timer > timeout) && ((uhost->control.timer - timeout) > (1000U * length))) \
-              || ((uhost->control.timer < timeout) && ((uhost->control.timer + 0x3FFFU - timeout) > (1000U * length))) \
-              || (0U == udev->host.connect_status)){
+        if (((uhost->control.timer - timeout) > (10000U * length)) || (0U == udev->host.connect_status)){
             msc->state = MSC_IDLE;
             return USBH_FAIL;
         }
@@ -548,9 +543,7 @@ usbh_status usbh_msc_write (usbh_host *uhost,
     timeout = uhost->control.timer;
 
     while (USBH_BUSY == usbh_msc_rdwr_process(uhost, lun)) {
-        if (((uhost->control.timer > timeout) && ((uhost->control.timer - timeout) > (1000U * length))) \
-              || ((uhost->control.timer < timeout) && ((uhost->control.timer + 0x3FFFU - timeout) > (1000U * length))) \
-              || (0U == udev->host.connect_status)){
+        if (((uhost->control.timer - timeout) > (10000U * length)) || (0U == udev->host.connect_status)) {
             msc->state = MSC_IDLE;
             return USBH_FAIL;
         }

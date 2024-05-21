@@ -2,14 +2,11 @@
     \file    main.c
     \brief   DAC concurrent mode output voltage demo
 
-    \version 2014-12-26, V1.0.0, firmware for GD32F10x
-    \version 2017-06-20, V2.0.0, firmware for GD32F10x
-    \version 2018-07-31, V2.1.0, firmware for GD32F10x
-    \version 2020-09-30, V2.2.0, firmware for GD32F10x
+    \version 2024-01-05, V2.3.0, firmware for GD32F10x
 */
 
 /*
-    Copyright (c) 2020, GigaDevice Semiconductor Inc.
+    Copyright (c) 2024, GigaDevice Semiconductor Inc.
 
     Redistribution and use in source and binary forms, with or without modification, 
 are permitted provided that the following conditions are met:
@@ -37,11 +34,11 @@ OF SUCH DAMAGE.
 
 #include "gd32f10x.h"
 
-#define DAC_OUT_VAL0 0x7FF0
-#define DAC_OUT_VAL1 0x1FF0
-
+/* configure RCU peripheral */
 void rcu_config(void);
+/* configure GPIO peripheral */
 void gpio_config(void);
+/* configure DAC peripheral */
 void dac_config(void);
 
 /*!
@@ -52,58 +49,61 @@ void dac_config(void);
 */
 int main(void)
 {
+    /* configure RCU peripheral */
     rcu_config();
+    /* configure GPIO peripheral */
     gpio_config();
+    /* configure DAC peripheral */
     dac_config();
-    while (1){
+
+    while(1) {
     }
 }
 
 /*!
-    \brief      configure the RCU of peripherals
+    \brief      configure RCU peripheral
     \param[in]  none
     \param[out] none
     \retval     none
 */
 void rcu_config(void)
 {
-    /* enable the clock of peripherals */
+    /* enable GPIOA clock */
     rcu_periph_clock_enable(RCU_GPIOA);
+    /* enable DAC clock */
     rcu_periph_clock_enable(RCU_DAC);
 }
 
 /*!
-    \brief      configure the related GPIO
+    \brief      configure GPIO peripheral
     \param[in]  none
     \param[out] none
     \retval     none
 */
 void gpio_config(void)
 {
-    /* once enabled the DAC, the corresponding GPIO pin is connected to the DAC converter automatically */
+    /* configure PA4 and PA5 as DAC output */
     gpio_init(GPIOA, GPIO_MODE_AIN, GPIO_OSPEED_50MHZ, GPIO_PIN_4 | GPIO_PIN_5);
 }
 
 /*!
-    \brief      configure the DAC
+    \brief      configure DAC peripheral
     \param[in]  none
     \param[out] none
     \retval     none
 */
 void dac_config(void)
 {
-    dac_deinit();
-    /* configure the DAC0 */
-    dac_trigger_disable(DAC0);
-    dac_wave_mode_config(DAC0, DAC_WAVE_DISABLE);
-    dac_output_buffer_enable(DAC0);
-    
-    /* configure the DAC1 */
-    dac_trigger_disable(DAC1);
-    dac_wave_mode_config(DAC1, DAC_WAVE_DISABLE);
-    dac_output_buffer_enable(DAC1);
-    
-    /* enable DAC concurrent mode and set data */
-    dac_concurrent_enable();
-    dac_concurrent_data_set(DAC_ALIGN_12B_L, DAC_OUT_VAL0, DAC_OUT_VAL1);
+    /* initialize DAC */
+    dac_deinit(DAC0);
+    /* DAC trigger disable */
+    dac_trigger_disable(DAC0, DAC_OUT0);
+    dac_trigger_disable(DAC0, DAC_OUT1);
+    /* DAC wave mode config */
+    dac_wave_mode_config(DAC0, DAC_OUT0, DAC_WAVE_DISABLE);
+    dac_wave_mode_config(DAC0, DAC_OUT1, DAC_WAVE_DISABLE);
+
+    /* DAC enable */
+    dac_concurrent_enable(DAC0);
+    dac_concurrent_data_set(DAC0, DAC_ALIGN_12B_L, 0x7FF0, 0x1FF0);
 }

@@ -2,14 +2,11 @@
     \file    readme.txt
     \brief   description of DACC_software_trigger_LFSR_noise example
 
-    \version 2014-12-26, V1.0.0, firmware for GD32F10x
-    \version 2017-06-20, V2.0.0, firmware for GD32F10x
-    \version 2018-07-31, V2.1.0, firmware for GD32F10x
-    \version 2020-09-30, V2.2.0, firmware for GD32F10x
+    \version 2024-01-05, V2.3.0, firmware for GD32F10x
 */
 
 /*
-    Copyright (c) 2020, GigaDevice Semiconductor Inc.
+    Copyright (c) 2024, GigaDevice Semiconductor Inc.
 
     Redistribution and use in source and binary forms, with or without modification, 
 are permitted provided that the following conditions are met:
@@ -35,7 +32,13 @@ ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSI
 OF SUCH DAMAGE.
 */
 
-  This example is based on the GD32107C-EVAL board, it shows how to use DAC concurrent
-mode software trigger to generate LFSR noise wave with different configurations. The 
-DAC0 output pin is configured PA4 and DAC1 output pin is configured PA5. The LFSR
-noise wave can be observed through the oscilloscope.
+  This example is based on the GD32F107C-EVAL-V1.3 board, it shows how to use DAC concurrent
+mode software trigger to generate LFSR noise wave with different configurations.
+
+  DAC is configured as following:
+  - Data 12-bit right alligned.
+  - Software trigger DAC0_OUT0 and DAC0_OUT1.
+  - DAC0_OUT0/DAC0_OUT1 is configured as PA4/PA5.
+  - LFSR mode, with 0-9/0-10 bit masking and offset value 0x7f0.
+
+  After system start-up, the LFSR noise wave can be observed through the scilloscope.

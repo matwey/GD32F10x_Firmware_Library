@@ -2,12 +2,11 @@
     \file    gd32f20x_it.c
     \brief   main interrupt service routines
 
-    \version 2020-07-17, V3.0.0, firmware for GD32F10x
-    \version 2022-06-30, V3.1.0, firmware for GD32F10x
+    \version 2024-01-05, V2.3.0, firmware for GD32F10x
 */
 
 /*
-    Copyright (c) 2022, GigaDevice Semiconductor Inc.
+    Copyright (c) 2024, GigaDevice Semiconductor Inc.
 
     Redistribution and use in source and binary forms, with or without modification, 
 are permitted provided that the following conditions are met:
@@ -54,6 +53,9 @@ static void resume_mcu_clk(void);
 */
 void NMI_Handler(void)
 {
+    /* if NMI exception occurs, go to infinite loop */
+    while(1){
+    }
 }
 
 /*!
@@ -112,6 +114,9 @@ void UsageFault_Handler(void)
 */
 void SVC_Handler(void)
 {
+    /* if SVC exception occurs, go to infinite loop */
+    while(1){
+    }
 }
 
 /*!
@@ -122,6 +127,9 @@ void SVC_Handler(void)
 */
 void DebugMon_Handler(void)
 {
+    /* if DebugMon exception occurs, go to infinite loop */
+    while(1){
+    }
 }
 
 /*!
@@ -132,6 +140,9 @@ void DebugMon_Handler(void)
 */
 void PendSV_Handler(void)
 {
+    /* if PendSV exception occurs, go to infinite loop */
+    while(1){
+    }
 }
 
 /*!
@@ -165,8 +176,8 @@ void TIMER2_IRQHandler(void)
 {
     usb_timer_irq();
 }
-#if USB_LOW_POWER
 
+#if USB_LOW_POWER
 /*!
     \brief      this function handles external line 0 interrupt request.
     \param[in]  none
@@ -178,7 +189,8 @@ void EXTI0_IRQHandler(void)
     if (exti_interrupt_flag_get(WAKEUP_KEY_EXTI_LINE) != RESET) {
         if (usb_host.suspend_flag == 1) {
             usb_host.suspend_flag = 0;
-            usb_host.wakeup_mode = 1; /* general wakeup mode */
+            /* general wakeup mode */
+            usb_host.wakeup_mode = 1; 
 
             /* configure system clock */
             resume_mcu_clk();
@@ -188,7 +200,6 @@ void EXTI0_IRQHandler(void)
         exti_interrupt_flag_clear(WAKEUP_KEY_EXTI_LINE);
     }
 }
-
 #endif /* USB_LOW_POWER */
 
 #if USB_LOW_POWER
@@ -202,7 +213,8 @@ void USBFS_WKUP_IRQHandler(void)
 {
     if (usb_host.suspend_flag == 1) {
         usb_host.suspend_flag = 0;
-        usb_host.wakeup_mode = 2; /* remote wakeup mode */
+        /* remote wakeup mode */
+        usb_host.wakeup_mode = 2; 
 
         /* configure system clock */
         resume_mcu_clk();
@@ -219,17 +231,17 @@ void USBFS_WKUP_IRQHandler(void)
 */
 static void resume_mcu_clk(void)
 {
-    /* enable HSE */
+    /* enable HXTAL */
     rcu_osci_on(RCU_HXTAL);
 
-    /* wait till HSE is ready */
+    /* wait till HXTAL is ready */
     while(RESET == rcu_flag_get(RCU_FLAG_HXTALSTB)){
     }
 
-    /* enable PLL1 */
+    /* enable PLL */
     rcu_osci_on(RCU_PLL1_CK);
 
-    /* wait till PLL1 is ready */
+    /* wait till PLL is ready */
     while(RESET == rcu_flag_get(RCU_FLAG_PLL1STB)){
     }
 
